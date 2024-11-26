@@ -1,0 +1,7 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "201/postgresql-42.7.4.jar",
+        "201/mysql-connector-j-9.1.0.jar"
+    ]
+}
