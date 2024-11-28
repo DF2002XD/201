@@ -1,7 +1,3 @@
-export default function Component() {
-  return (
-    <pre className="language-sql">
-      {`-- Insert sample data into productos table
 INSERT INTO productos (nombre_producto, precio, stock) VALUES
 ('Laptop Gamer X1', 1299.99, 50),
 ('Smartphone Y2', 699.99, 100),
@@ -36,7 +32,4 @@ INSERT INTO pedidos_productos (id_pedido, id_producto, cantidad) VALUES
 (4, 5, 1),
 (5, 2, 1),
 (5, 3, 1),
-(5, 4, 1);`}
-    </pre>
-  );
-}
+(5, 4, 1);
