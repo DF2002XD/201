@@ -2,6 +2,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Scanner;
 
 public class DatabaseOperations {
     // MySQL connection details
@@ -15,48 +16,153 @@ public class DatabaseOperations {
     private static final String POSTGRES_PASSWORD = "abc123";
 
     public static void main(String[] args) {
-        // Example usage of the implemented functions
-        try {
-            // 1. Create a new category
-            crearCategoria("Smartphones");
+        try (Scanner scanner = new Scanner(System.in)) {
+            int choice;
+            do {
+                displayMenu();
+                System.out.print("Ingrese su elección: ");
+                choice = scanner.nextInt();
+                scanner.nextLine(); // Consume newline
 
-            // 2. Create a new provider
-            crearNuevoProveedor("TechSupplier", "B12345678", 912345678, "contact@techsupplier.com");
+                switch (choice) {
+                    case 1 -> {
+                        System.out.print("Ingrese el nombre de la categoría: ");
+                        String categoryName = scanner.nextLine();
+                        crearCategoria(categoryName);
+                    }
+                    case 2 -> {
+                        System.out.print("Ingrese el nombre del proveedor: ");
+                        String providerName = scanner.nextLine();
+                        System.out.print("Ingrese el NIF: ");
+                        String nif = scanner.nextLine();
+                        System.out.print("Ingrese el número de teléfono: ");
+                        int phone = scanner.nextInt();
+                        scanner.nextLine(); // Consume newline
+                        System.out.print("Ingrese el email: ");
+                        String email = scanner.nextLine();
+                        crearNuevoProveedor(providerName, nif, phone, email);
+                    }
+                    case 3 -> {
+                        System.out.print("Ingrese el ID del proveedor a eliminar: ");
+                        int providerId = scanner.nextInt();
+                        eliminarProveedor(providerId);
+                    }
+                    case 4 -> {
+                        System.out.print("Ingrese el nombre del usuario: ");
+                        String userName = scanner.nextLine();
+                        System.out.print("Ingrese el email del usuario: ");
+                        String userEmail = scanner.nextLine();
+                        System.out.print("Ingrese el año de nacimiento: ");
+                        int birthYear = scanner.nextInt();
+                        crearUsuario(userName, userEmail, birthYear);
+                    }
+                    case 5 -> {
+                        System.out.print("Ingrese el ID del usuario a eliminar: ");
+                        int userId = scanner.nextInt();
+                        eliminarUsuario(userId);
+                    }
+                    case 6 -> {
+                        System.out.print("Ingrese el nombre del producto: ");
+                        String productName = scanner.nextLine();
+                        System.out.print("Ingrese el precio: ");
+                        double price = scanner.nextDouble();
+                        System.out.print("Ingrese el stock: ");
+                        int stock = scanner.nextInt();
+                        scanner.nextLine(); // Consume newline
+                        System.out.print("Ingrese el nombre de la categoría: ");
+                        String prodCategoryName = scanner.nextLine();
+                        System.out.print("Ingrese el NIF del proveedor: ");
+                        String providerNif = scanner.nextLine();
+                        crearProducto(productName, price, stock, prodCategoryName, providerNif);
+                    }
+                    case 7 -> {
+                        System.out.print("Ingrese el nombre del producto a eliminar: ");
+                        String productToDelete = scanner.nextLine();
+                        eliminarProductoPorNombre(productToDelete);
+                    }
+                    case 8 -> {
+                        System.out.print("Ingrese el umbral de stock: ");
+                        int threshold = scanner.nextInt();
+                        listarProductosBajoStock(threshold);
+                    }
+                    case 9 -> obtenerTotalPedidosUsuarios();
+                    case 10 -> obtenerCantidadProductosEnCadaAlmacen();
+                    case 11 -> listarTodosProductosConCategoriaYProveedor();
+                    case 12 -> {
+                        System.out.print("Ingrese el ID de la categoría: ");
+                        int categoryId = scanner.nextInt();
+                        obtenerUsuariosCompraronProductosCategoria(categoryId);
+                    }
+                    case 0 -> System.out.println("Saliendo del programa. ¡Hasta luego!");
+                    default -> System.out.println("Opción inválida. Por favor, intente de nuevo.");
+                }
 
-            // 3. Create a new user
-            crearUsuario("Elena López", "elena.lopez@email.com", 1995);
-
-            // 4. Create a new product
-            crearProducto("Smartphone X1", 599.99, 100, "Smartphones", "B12345678");
-
-            // 5. List products with low stock
-            listarProductosBajoStock(50);
-
-            // 6. Get total orders by users
-            obtenerTotalPedidosUsuarios();
-
-            // 7. Get product quantity in each warehouse
-            obtenerCantidadProductosEnCadaAlmacen();
-
-            // 8. List all products with their categories and providers
-            listarTodosProductosConCategoriaYProveedor();
-
-            // 9. Get users who bought products from a specific category
-            // Assuming the category ID for "Smartphones" is 1
-            obtenerUsuariosCompraronProductosCategoria(1);
-
-            // 10. Delete a product (uncomment to test)
-            // eliminarProductoPorNombre("Smartphone X1");
-
-            // 11. Delete a user (uncomment to test)
-            // eliminarUsuario(6); // Assuming Elena López got ID 6
-
-            // 12. Delete a provider (uncomment to test)
-            // eliminarProveedor(6); // Assuming TechSupplier got ID 6
-
-        } catch (Exception e) {
-            e.printStackTrace();
+                System.out.println("\nPresione Enter para continuar...");
+                scanner.nextLine();
+            } while (choice != 0);
+            /*
+             * // Example usage of the implemented functions
+             * try {
+             * // 1. Create a new category
+             * crearCategoria("Smartphones");
+             *
+             * // 2. Create a new provider
+             * crearNuevoProveedor("TechSupplier", "B12345678", 912345678,
+             * "contact@techsupplier.com");
+             *
+             * // 3. Create a new user
+             * crearUsuario("Elena López", "elena.lopez@email.com", 1995);
+             *
+             * // 4. Create a new product
+             * crearProducto("Smartphone X1", 599.99, 100, "Smartphones", "B12345678");
+             *
+             * // 5. List products with low stock
+             * listarProductosBajoStock(50);
+             *
+             * // 6. Get total orders by users
+             * obtenerTotalPedidosUsuarios();
+             *
+             * // 7. Get product quantity in each warehouse
+             * obtenerCantidadProductosEnCadaAlmacen();
+             *
+             * // 8. List all products with their categories and providers
+             * listarTodosProductosConCategoriaYProveedor();
+             *
+             * // 9. Get users who bought products from a specific category
+             * // Assuming the category ID for "Smartphones" is 1
+             * obtenerUsuariosCompraronProductosCategoria(1);
+             *
+             * // 10. Delete a product (uncomment to test)
+             * // eliminarProductoPorNombre("Smartphone X1");
+             *
+             * // 11. Delete a user (uncomment to test)
+             * // eliminarUsuario(6); // Assuming Elena López got ID 6
+             *
+             * // 12. Delete a provider (uncomment to test)
+             * // eliminarProveedor(6); // Assuming TechSupplier got ID 6
+             *
+             * } catch (Exception e) {
+             * e.printStackTrace();
+             * }
+             */
         }
+    }
+
+    private static void displayMenu() {
+        System.out.println("\n===== Menú de Operaciones de Base de Datos =====");
+        System.out.println("1. Crear una nueva categoría");
+        System.out.println("2. Crear un nuevo proveedor");
+        System.out.println("3. Eliminar un proveedor");
+        System.out.println("4. Crear un nuevo usuario");
+        System.out.println("5. Eliminar un usuario");
+        System.out.println("6. Crear un nuevo producto");
+        System.out.println("7. Eliminar un producto por nombre");
+        System.out.println("8. Listar productos con bajo stock");
+        System.out.println("9. Obtener total de pedidos por usuario");
+        System.out.println("10. Obtener cantidad de productos en cada almacén");
+        System.out.println("11. Listar todos los productos con categorías y proveedores");
+        System.out.println("12. Obtener usuarios que compraron productos de una categoría específica");
+        System.out.println("0. Salir");
     }
 
     // 1. Crear una nueva categoría (PostgreSQL)
@@ -180,35 +286,47 @@ public class DatabaseOperations {
 
             connMySQL.setAutoCommit(false);
             connPostgres.setAutoCommit(false);
-            try (PreparedStatement checkstmt = connMySQL
-                    .prepareStatement("SELECT COUNT(*) FROM productos WHERE nombre_producto = ?")) {
-                checkstmt.setString(1, nombre);
-                ResultSet rs = checkstmt.executeQuery();
+
+            // Primero, obtener el id_proveedor de PostgreSQL
+            int id_proveedor = getProveedorId(connPostgres, nif);
+
+            // Ahora, verificar si ya existe un producto con el mismo nombre y proveedor en
+            // MySQL
+            try (PreparedStatement checkStmt = connMySQL.prepareStatement(
+                    "SELECT COUNT(*) FROM productos p JOIN proveedores pr ON p.id_proveedor = pr.id_proveedor " +
+                            "WHERE p.nombre_producto = ? AND pr.nif = ?")) {
+                checkStmt.setString(1, nombre);
+                checkStmt.setString(2, nif);
+                ResultSet rs = checkStmt.executeQuery();
                 rs.next();
                 int count = rs.getInt(1);
+
                 if (count > 0) {
-                    System.out.println("Ya existe un producto con el mismo nombre. No se ha creado uno nuevo.");
+                    System.out.println(
+                            "Ya existe un producto con el mismo nombre para este proveedor. No se ha creado uno nuevo.");
                     return;
                 }
             }
-            // Insert into MySQL
+
+            // Si no existe, proceder con la inserción
+            int id_producto;
             try (PreparedStatement pstmtMySQL = connMySQL.prepareStatement(
-                    "INSERT INTO productos (nombre_producto, precio, stock) VALUES (?, ?, ?)",
+                    "INSERT INTO productos (nombre_producto, precio, stock, id_proveedor) VALUES (?, ?, ?, ?)",
                     Statement.RETURN_GENERATED_KEYS)) {
                 pstmtMySQL.setString(1, nombre);
                 pstmtMySQL.setDouble(2, precio);
                 pstmtMySQL.setInt(3, stock);
+                pstmtMySQL.setInt(4, id_proveedor);
                 pstmtMySQL.executeUpdate();
 
                 try (ResultSet generatedKeys = pstmtMySQL.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
-                        int id_producto = generatedKeys.getInt(1);
+                        id_producto = generatedKeys.getInt(1);
 
-                        // Get category and provider IDs from PostgreSQL
+                        // Obtener id_categoria de PostgreSQL
                         int id_categoria = getCategoriaId(connPostgres, nombre_categoria);
-                        int id_proveedor = getProveedorId(connPostgres, nif);
 
-                        // Insert into PostgreSQL
+                        // Insertar en PostgreSQL
                         try (PreparedStatement pstmtPostgres = connPostgres.prepareStatement(
                                 "INSERT INTO productos (id_producto, id_proveedor, id_categoria) VALUES (?, ?, ?)")) {
                             pstmtPostgres.setInt(1, id_producto);
@@ -221,7 +339,7 @@ public class DatabaseOperations {
                         connPostgres.commit();
                         System.out.println("Producto creado exitosamente en ambas bases de datos.");
                     } else {
-                        throw new SQLException("Creating product failed, no ID obtained.");
+                        throw new SQLException("La creación del producto falló, no se obtuvo ID.");
                     }
                 }
             }
@@ -256,7 +374,7 @@ public class DatabaseOperations {
                 if (rs.next()) {
                     return rs.getInt("id_categoria");
                 } else {
-                    throw new SQLException("Categoria not found: " + nombre_categoria);
+                    throw new SQLException("Categoria no encontrada: " + nombre_categoria);
                 }
             }
         }
@@ -271,7 +389,7 @@ public class DatabaseOperations {
                 if (rs.next()) {
                     return rs.getInt("id_proveedor");
                 } else {
-                    throw new SQLException("Proveedor not found with NIF: " + nif);
+                    throw new SQLException("Proveedor no encontrado con NIF: " + nif);
                 }
             }
         }
@@ -297,7 +415,7 @@ public class DatabaseOperations {
                     if (rs.next()) {
                         id_producto = rs.getInt("id_producto");
                     } else {
-                        throw new SQLException("Product not found: " + nombre);
+                        throw new SQLException("Product no encontrado: " + nombre);
                     }
                 }
             }
