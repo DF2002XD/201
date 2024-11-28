@@ -165,6 +165,14 @@ public class DatabaseOperations {
         System.out.println("0. Salir");
     }
 
+    private static void handleException(String operation, Exception e) {
+        System.err.println("Error durante la operación: " + operation);
+        System.err.println("Tipo de error: " + e.getClass().getSimpleName());
+        System.err.println("Mensaje: " + e.getMessage());
+        // Descomenta la siguiente línea si necesitas la traza completa para depuración
+        // e.printStackTrace();
+    }
+
     // 1. Crear una nueva categoría (PostgreSQL)
     public static void crearCategoria(String nombreCategoria) {
         try (Connection conn = DriverManager.getConnection(POSTGRES_URL, POSTGRES_USER, POSTGRES_PASSWORD);
@@ -186,7 +194,7 @@ public class DatabaseOperations {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            handleException("Crear categoría", e);
         }
     }
 
@@ -214,7 +222,7 @@ public class DatabaseOperations {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            handleException("Crear nuevo proveedor", e);
         }
     }
 
@@ -230,7 +238,7 @@ public class DatabaseOperations {
                 System.out.println("No se encontró el proveedor con el ID especificado.");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            handleException("Eliminar proveedor", e);
         }
     }
 
@@ -256,7 +264,7 @@ public class DatabaseOperations {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            handleException("Crear usuario", e);
         }
     }
 
@@ -272,7 +280,7 @@ public class DatabaseOperations {
                 System.out.println("No se encontró el usuario con el ID especificado.");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            handleException("Eliminar usuario", e);
         }
     }
 
@@ -350,9 +358,8 @@ public class DatabaseOperations {
                 if (connPostgres != null)
                     connPostgres.rollback();
             } catch (SQLException ex) {
-                ex.printStackTrace();
+                handleException("Rollback en crear producto", ex);
             }
-            e.printStackTrace();
         } finally {
             try {
                 if (connMySQL != null)
@@ -360,7 +367,7 @@ public class DatabaseOperations {
                 if (connPostgres != null)
                     connPostgres.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                handleException("Cerrar conexiones en crear producto", e);
             }
         }
     }
@@ -443,9 +450,8 @@ public class DatabaseOperations {
                 if (connPostgres != null)
                     connPostgres.rollback();
             } catch (SQLException ex) {
-                ex.printStackTrace();
+                handleException("Rollback en eliminar producto", ex);
             }
-            e.printStackTrace();
         } finally {
             try {
                 if (connMySQL != null)
@@ -453,7 +459,7 @@ public class DatabaseOperations {
                 if (connPostgres != null)
                     connPostgres.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                handleException("Cerrar conexiones en eliminar producto", e);
             }
         }
     }
@@ -471,7 +477,7 @@ public class DatabaseOperations {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            handleException("Listar productos con bajo stock", e);
         }
     }
 
@@ -489,7 +495,7 @@ public class DatabaseOperations {
                         rs.getInt("total_pedidos"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            handleException("Obtener total de pedidos por usuario", e);
         }
     }
 
@@ -508,7 +514,7 @@ public class DatabaseOperations {
                         rs.getInt("total_productos"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            handleException("Obtener cantidad de productos en cada almacén", e);
         }
     }
 
@@ -551,7 +557,7 @@ public class DatabaseOperations {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            handleException("Listar todos los productos con categoría y proveedor", e);
         }
     }
 
@@ -596,7 +602,7 @@ public class DatabaseOperations {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            handleException("Obtener usuarios que compraron productos de una categoría", e);
         }
     }
 }
