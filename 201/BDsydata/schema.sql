@@ -1,3 +1,5 @@
+CREATE DATABASE productos;
+USE productos;
 -- Create the productos table
 CREATE TABLE productos (
     id_producto INT PRIMARY KEY AUTO_INCREMENT,
